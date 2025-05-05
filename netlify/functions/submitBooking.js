@@ -1,8 +1,14 @@
 const admin = require("firebase-admin");
 
+// فك التشفير من متغير البيئة
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.FIREBASE_KEY_BASE64, 'base64').toString('utf8')
+);
+
+// تهيئة Firebase Admin إذا لم يتم تهيئته مسبقًا
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(require("./serviceAccountKey.json")), // حط ملفك في نفس المجلد
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 
@@ -25,7 +31,6 @@ function validateEgyptianID(id) {
   if (month < 1 || month > 12) return false;
 
   const day = parseInt(id.slice(5, 7));
-
   if ([1, 3, 5, 7, 8, 10, 12].includes(month) && (day < 1 || day > 31)) return false;
   if ([4, 6, 9, 11].includes(month) && (day < 1 || day > 30)) return false;
 
