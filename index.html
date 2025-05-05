@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مؤتمرات عائلات 2025</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1 class="main-title">مؤتمرات عائلات 2025</h1>
+
+  <div class="status-container">
+    <span class="icon" id="statusIcon">⏳</span>
+    <span id="bookingStatus" class="status-text">جاري التحقق من حالة الحجز...</span>
+  </div>
+
+  <div class="container">
+    <form id="index">
+      <div class="notice-box">
+        <span class="notice-icon">⚠️</span>
+        <div class="notice-text">
+          <strong>تنبيه:</strong><br />
+          * مسموح لرقم الموبايل يحجز مرة واحدة فقط<br />
+          * مسموح لجهاز الموبايل يحجز أكثر من مرة لمساعدة الآخرين لكن ببياناتهم هم.<br />
+          * يجب كتابة الأرقام باللغة الأنجليزية فقط  <br />
+          * يجب كتابة الرقم القومي 14 رقم<br />
+        </div>
+      </div>
+
+      <input type="text" id="fullName" placeholder="الاسم الكامل" required />
+      <input type="text" id="meeting" placeholder="الاجتماع" required />
+      <input type="tel" id="phoneNumber" placeholder="رقم الهاتف" required />
+      <input type="text" id="nationalId" placeholder="الرقم القومي" required />
+      <select id="bookingArea" required>
+        <option value="">اختر المنطقة</option>
+        <option value="من العدوة الى ابوقرقاص">من العدوة الى ابوقرقاص</option>
+        <option value="من ملوى الى ديروط">من ملوى الى ديروط</option>
+        <option value="من القوصية الى ما قبل طما">من القوصية الى ما قبل طما</option>
+      </select>
+      <button type="submit">حجز</button>
+    </form>
+
+    <div id="confirmation" style="display:none;">
+      <h2>تم الحجز بنجاح</h2>
+      <div id="confirmationDetails"></div>
+      <button onclick="saveAsImage()">حفظ الصورة</button>
+    </div>
+  </div>
+
+  <!-- Firebase & Tools -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

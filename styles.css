@@ -1,0 +1,142 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background: #f8f8f8;
+  margin: 0;
+  padding: 2rem;
+  direction: rtl;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* العنوان الرئيسي */
+.main-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #14106e;
+}
+
+/* حالة الحجز */
+.status-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9e9ff;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+  margin-inline: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.status-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #14106e;
+}
+
+.icon {
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #14106e;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #2e1ff7;
+}
+
+/* مربع التنبيه */
+.notice-box {
+  background-color: #edf0ff;
+  border: 2px solid #cfd6ff;
+  color: #14106e;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.notice-icon {
+  font-size: 1.5rem;
+  margin-top: 2px;
+}
+
+.notice-text {
+  flex: 1;
+}
+
+/* الوضع الداكن */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #e0e0e0;
+  }
+
+  .container, .status-container {
+    background: #1e1e1e;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+  }
+
+  input, select {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #e0e0e0;
+  }
+
+  input::placeholder {
+    color: #aaa;
+  }
+
+  .status-text,
+  .main-title {
+    color: #ffffff;
+  }
+
+  .notice-box {
+    background-color: #1e1e40;
+    border: 2px solid #303070;
+    color: #d2d8ff;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+  }
+
+  .notice-icon {
+    color: #ffd700;
+  }
+}

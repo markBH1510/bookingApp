@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>صفحة الأدمن - عرض الحجوزات</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <!-- jsPDF + autotable + Arabic support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-rtl/3.2.0/jspdf-rtl.min.js"></script>
+  <!-- HTML: يجب أن تكون هذه هي الترتيب الصحيح للسكربتات -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  
+
+
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      direction: rtl;
+    }
+    h1 {
+      text-align: center;
+      color: #000;
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+      color: #000;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    #noData {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #777;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #14106e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>صفحة عرض حجوزات المؤتمرات</h1>
+
+    <label for="areaSelect">اختر المنطقة:</label>
+    <select id="areaSelect">
+      <option value="">-- اختر منطقة --</option>
+      <option value="من العدوة الى ابوقرقاص">من العدوة الى ابوقرقاص</option>
+      <option value="من ملوى الى ديروط">من ملوى الى ديروط</option>
+      <option value="من القوصية الى ما قبل طما">من القوصية الى ما قبل طما</option>
+    </select>
+
+    <div id="noData" style="display: none;">لا توجد حجوزات لهذه المنطقة.</div>
+
+    <table id="resultsTableBody" style="display: none;">
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>الاجتماع</th>
+          <th>رقم الهاتف</th>
+          <th>الرقم القومي</th>
+          <th>المنطقة</th>
+          <th>الرقم المسلسل</th>
+          <th>تاريخ الحجز</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button id="exportBtn" style="display: none;">تصدير إلى PDF</button>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
