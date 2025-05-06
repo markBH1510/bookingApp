@@ -11,10 +11,10 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const bookingStart = new Date("2025-05-01T08:00:00");
-const bookingEnd = new Date("2025-05-07T23:59:59");
+const bookingEnd = new Date("2025-05-09T23:59:59");
 
 const bookingStatus = document.getElementById("bookingStatus");
-const submitButton = document.querySelector("button[type='submit']");
+const submitButton = document.getElementById("submitBtn");
 const statusIcon = document.getElementById("statusIcon");
 
 async function getServerTime() {
@@ -38,16 +38,13 @@ async function updateBookingStatus() {
     const diff = bookingStart - now;
     bookingStatus.innerText = `لم يبدأ الحجز بعد. يبدأ خلال ${formatCountdown(diff)}`;
     statusIcon.innerText = "⏳";
-    submitButton.disabled = true;
   } else if (now > bookingEnd) {
     bookingStatus.innerText = "⛔ انتهى وقت الحجز.";
     statusIcon.innerText = "⛔";
-    submitButton.disabled = true;
   } else {
     const diff = bookingEnd - now;
     bookingStatus.innerText = `الحجز مفتوح! ينتهي خلال ${formatCountdown(diff)}`;
     statusIcon.innerText = "⏰";
-    submitButton.disabled = false;
   }
 }
 
@@ -116,14 +113,25 @@ function validateEgyptianID(id) {
   return true;
 }
 
-document.getElementById("index").addEventListener("submit", async function (e) {
+document.getElementById("submitBtn").addEventListener("click", async function (e) {
   e.preventDefault();
+  const form = document.getElementById("index");
+  if (!form.checkValidity()) {
+  form.reportValidity();
+  return;
+  }
   submitButton.disabled = true;
 
   try {
     const now = await getServerTime();
+    const devicetime = new Date();
+    // حساب الفرق بين التوقيتين
+    const timeDifference = Math.abs(now.getTime() - devicetime.getTime());
+    // إذا كان الفرق أقل من 1000 ميلي ثانية (أي أقل من ثانية واحدة)، اعتبر الوقت متساويًا
+    if (timeDifference > 5000)return alert("تأكد من ضبط الوقت على جهازك بشكل صحيح.");
     if (now < bookingStart) return alert("لم يبدأ الحجز بعد.");
     if (now > bookingEnd) return alert("انتهى وقت الحجز.");
+   
 
     const name = document.getElementById("fullName").value;
     const meeting = document.getElementById("meeting").value;
@@ -142,11 +150,22 @@ document.getElementById("index").addEventListener("submit", async function (e) {
         : "الرقم القومي مستخدم مسبقاً في هذه المنطقة.");
     }
 
-    const serial = await getNextSerial(area);
-    await db.collection("bookings").add({
-      name, meeting, phone, id, area, serial,
-      date: firebase.firestore.FieldValue.serverTimestamp()
+    const response = await fetch("https://booking3a2lat.netlify.app/.netlify/functions/submitBooking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, meeting, phone, id, area })
     });
+    
+    const result = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(result.error || "حدث خطأ أثناء إرسال البيانات");
+    }
+    
+    const serial = result.serial;
+    
     const daysArabic = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
     const dayName = daysArabic[now.getDay()];
     const hours = now.getHours();
@@ -203,4 +222,3 @@ function saveAsImage() {
     link.click();
   });
 }
-
