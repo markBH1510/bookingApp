@@ -110,7 +110,7 @@ button:hover {
 }
 
 #confirmation h2 {
-  color: #14106e;
+  color: #000000;
   margin-bottom: 1rem;
 }
 
@@ -152,11 +152,14 @@ button:hover {
 @media (max-width: 480px) {
   #confirmation {
     padding: 1rem;
+    background-color: #FAF9F6; /* الحفاظ على اللون الأصلي */
+    color: #000; /* الحفاظ على اللون الأصلي */
   }
 
   #confirmationDetails {
     padding: 1rem;
     font-size: 1rem;
+    background-color: #f3f3ff; /* الحفاظ على اللون الأصلي */
   }
 
   .detail-row {
@@ -210,15 +213,17 @@ button:hover {
   }
 
   #confirmation {
-    background-color: #1c1c2b;
-    color: #fff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    background-color: #FAF9F6; /* الحفاظ على اللون الأصلي */
+    color: #000; /* الحفاظ على اللون الأصلي */
   }
 
   #confirmationDetails {
-    background-color: #2c2c3d;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    font-size: 1rem;
+    background-color: #f3f3ff; /* الحفاظ على اللون الأصلي */
   }
+
 
   .detail-label {
     color: #9db3ff;
