@@ -177,11 +177,24 @@ document.getElementById("confirmation").style.display = "block";
 });
 
 function saveAsImage() {
-  html2canvas(document.getElementById("confirmation"), {
-    backgroundColor: "#FFFFFF",
-    onclone: function (document) {
-      const confirmationElement = document.getElementById("confirmation");
-      confirmationElement.style.color = "#000000";
+  const confirmationElement = document.getElementById("confirmation");
+
+  html2canvas(confirmationElement, {
+    backgroundColor: "#ffffff",
+    scale: 2, // لزيادة الدقة
+    useCORS: true,
+    onclone: function (clonedDoc) {
+      const el = clonedDoc.getElementById("confirmation");
+
+      // تأكد من نسخ جميع الأنماط الضرورية
+      el.style.color = "#000";
+      el.style.backgroundColor = "#fff";
+      el.style.padding = "2rem";
+      el.style.fontFamily = "Arial, sans-serif";
+      el.style.textAlign = "right";
+      el.style.direction = "rtl";
+      el.style.borderRadius = "12px";
+      el.style.boxShadow = "0 0 12px rgba(0,0,0,0.7)";
     }
   }).then(canvas => {
     const link = document.createElement("a");
@@ -190,3 +203,4 @@ function saveAsImage() {
     link.click();
   });
 }
+
