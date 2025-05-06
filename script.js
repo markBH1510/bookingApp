@@ -10,8 +10,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const bookingStart = new Date("2025-05-0T08:00:00");
-const bookingEnd = new Date("2025-05-07T23:59:59");
+const bookingStart = new Date("2025-05-08T16:00:00");
+const bookingEnd =   new Date("2025-05-08T22:00:00");
 
 const bookingStatus = document.getElementById("bookingStatus");
 const submitButton = document.getElementById("submitBtn");
