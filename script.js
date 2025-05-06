@@ -150,22 +150,11 @@ document.getElementById("submitBtn").addEventListener("click", async function (e
         : "الرقم القومي مستخدم مسبقاً في هذه المنطقة.");
     }
 
-    const response = await fetch("https://booking3a2lat.netlify.app/.netlify/functions/submitBooking", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, meeting, phone, id, area })
+    const serial = await getNextSerial(area);
+    await db.collection("bookings").add({
+      name, meeting, phone, id, area, serial,
+      date: firebase.firestore.FieldValue.serverTimestamp()
     });
-    
-    const result = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(result.error || "حدث خطأ أثناء إرسال البيانات");
-    }
-    
-    const serial = result.serial;
-    
     const daysArabic = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
     const dayName = daysArabic[now.getDay()];
     const hours = now.getHours();
