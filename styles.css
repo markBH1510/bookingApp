@@ -71,6 +71,10 @@ button {
   font-weight: bold;
   border: none;
   cursor: pointer;
+  margin-top: 1.5rem;
+  border-radius: 4px;
+
+  
 }
 
 button:hover {
@@ -139,4 +143,53 @@ button:hover {
   .notice-icon {
     color: #ffd700;
   }
+  #confirmation {
+    padding: 2rem;
+    background-color: #FAF9F6;
+    color: #000;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    text-align: center;
+
+  }
+  
+  #confirmation h2 {
+    color: #14106e;
+    margin-bottom: 1rem;
+  }
+  #confirmationDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: auto;
+    text-align: right;
+    background-color: #f3f3ff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+    font-size: 1.1rem;
+    direction: rtl;
+  }
+  
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #ccc;
+    padding: 0.25rem 0;
+  }
+  
+  .detail-label {
+    font-weight: bold;
+    color: #14106e;
+    flex: 1;
+  }
+  
+  .detail-value {
+    flex: 1;
+    text-align: right;
+  }
+  
+  
 }

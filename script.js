@@ -10,7 +10,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// إعداد المواعيد
 const bookingStart = new Date("2025-05-01T08:00:00");
 const bookingEnd = new Date("2025-05-07T23:59:59");
 
@@ -18,9 +17,8 @@ const bookingStatus = document.getElementById("bookingStatus");
 const submitButton = document.querySelector("button[type='submit']");
 const statusIcon = document.getElementById("statusIcon");
 
-// استخدام توقيت السيرفر بدلاً من جهاز المستخدم
 async function getServerTime() {
-  const docRef = await db.collection("serverTime").doc("now").set({ ts: firebase.firestore.FieldValue.serverTimestamp() });
+  await db.collection("serverTime").doc("now").set({ ts: firebase.firestore.FieldValue.serverTimestamp() });
   const doc = await db.collection("serverTime").doc("now").get();
   return doc.exists ? doc.data().ts.toDate() : new Date();
 }
@@ -56,8 +54,6 @@ async function updateBookingStatus() {
 setInterval(updateBookingStatus, 10000);
 updateBookingStatus();
 
-
-// ✅ التحقق من التكرار داخل نفس المنطقة فقط
 async function checkDuplicate(phone, id, area) {
   const phoneSnapshot = await db.collection("bookings")
     .where("area", "==", area)
@@ -76,7 +72,6 @@ async function checkDuplicate(phone, id, area) {
   return { duplicated: false };
 }
 
-// الترقيم المتسلسل لكل منطقة
 async function getNextSerial(area) {
   const counterRef = db.collection("counters").doc(area);
   return await db.runTransaction(async (transaction) => {
@@ -88,7 +83,6 @@ async function getNextSerial(area) {
   });
 }
 
-// التحقق من الرقم القومي المصري
 function validateEgyptianID(id) {
   if (!/^\d{14}$/.test(id)) return false;
 
@@ -102,7 +96,6 @@ function validateEgyptianID(id) {
   if (month < 1 || month > 12) return false;
 
   const day = parseInt(id.slice(5, 7));
-
   if ([1, 3, 5, 7, 8, 10, 12].includes(month) && (day < 1 || day > 31)) return false;
   if ([4, 6, 9, 11].includes(month) && (day < 1 || day > 30)) return false;
 
@@ -123,74 +116,66 @@ function validateEgyptianID(id) {
   return true;
 }
 
-// عند إرسال النموذج
 document.getElementById("index").addEventListener("submit", async function (e) {
   e.preventDefault();
+  submitButton.disabled = true;
 
-  const now = await getServerTime();
-  if (now < bookingStart) return alert("لم يبدأ الحجز بعد.");
-  if (now > bookingEnd) return alert("انتهى وقت الحجز.");
-
-  const name = document.getElementById("fullName").value;
-  const meeting = document.getElementById("meeting").value;
-  const phone = document.getElementById("phoneNumber").value;
-  const id = document.getElementById("nationalId").value;
-  const area = document.getElementById("bookingArea").value;
-
-  // ✅ التحقق من صحة الرقم القومي
-  if (!validateEgyptianID(id)) {
-    return alert("الرقم القومي غير صالح. تأكد منه واعد المحاولة.");
-  }
-
-  // ✅ التحقق من صحة رقم الهاتف
-  const phoneRegex = /^01[0125]\d{8}$/;
-  if (!phoneRegex.test(phone)) {
-    return alert("رقم الهاتف غير صالح. يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويتكون من 11 رقمًا.");
-  }
-
-  // ✅ التحقق من التكرار داخل نفس المنطقة
-  const duplicateCheck = await checkDuplicate(phone, id, area);
-  if (duplicateCheck.duplicated) {
-    if (duplicateCheck.field === "phone") {
-      return alert("رقم الهاتف مستخدم مسبقاً في هذه المنطقة.");
-    } else if (duplicateCheck.field === "id") {
-      return alert("الرقم القومي مستخدم مسبقاً في هذه المنطقة.");
-    }
-  }
-
-  let serial;
   try {
-    serial = await getNextSerial(area);
+    const now = await getServerTime();
+    if (now < bookingStart) return alert("لم يبدأ الحجز بعد.");
+    if (now > bookingEnd) return alert("انتهى وقت الحجز.");
+
+    const name = document.getElementById("fullName").value;
+    const meeting = document.getElementById("meeting").value;
+    const phone = document.getElementById("phoneNumber").value;
+    const id = document.getElementById("nationalId").value;
+    const area = document.getElementById("bookingArea").value;
+
+    if (!validateEgyptianID(id)) return alert("الرقم القومي غير صالح.");
+    const phoneRegex = /^01[0125]\d{8}$/;
+    if (!phoneRegex.test(phone)) return alert("رقم الهاتف غير صالح.");
+
+    const duplicateCheck = await checkDuplicate(phone, id, area);
+    if (duplicateCheck.duplicated) {
+      return alert(duplicateCheck.field === "phone"
+        ? "رقم الهاتف مستخدم مسبقاً في هذه المنطقة."
+        : "الرقم القومي مستخدم مسبقاً في هذه المنطقة.");
+    }
+
+    const serial = await getNextSerial(area);
+    await db.collection("bookings").add({
+      name, meeting, phone, id, area, serial,
+      date: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const daysArabic = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const dayName = daysArabic[now.getDay()];
+    const hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const period = hours >= 12 ? 'مساءً' : 'صباحًا';
+    const formattedHour = hours % 12 || 12; // تحويل 0 إلى 12
+    const dateFormatted = `${dayName} ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} - ${formattedHour}:${minutes} ${period}`;
+        const confirmation = `
+  <div class="confirmation-box">
+    <div class="detail-row"><span class="detail-label">الاسم:</span><span class="detail-value">${name}</span></div>
+    <div class="detail-row"><span class="detail-label">الاجتماع:</span><span class="detail-value">${meeting}</span></div>
+    <div class="detail-row"><span class="detail-label">رقم الهاتف:</span><span class="detail-value">${phone}</span></div>
+    <div class="detail-row"><span class="detail-label">الرقم القومي:</span><span class="detail-value">${id}</span></div>
+    <div class="detail-row"><span class="detail-label">المنطقة:</span><span class="detail-value">${area}</span></div>
+    <div class="detail-row"><span class="detail-label">رقم الحجز:</span><span class="detail-value">${serial}</span></div>
+    <div class="detail-row"><span class="detail-label">التاريخ:</span><span class="detail-value">${dateFormatted}</span></div>
+  </div>
+`;
+document.getElementById("confirmationDetails").innerHTML = confirmation;
+document.getElementById("confirmation").style.display = "block";
+
   } catch (err) {
-    alert("حدث خطأ في إنشاء رقم الحجز.");
+    alert("حدث خطأ. حاول مرة أخرى.");
     console.error(err);
-    return;
+  } finally {
+    submitButton.disabled = false;
   }
-
-  await db.collection("bookings").add({
-    name,
-    meeting,
-    phone,
-    id,
-    area,
-    serial,
-    date: firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  const confirmation = `
-    الاسم: ${name}<br>
-    الاجتماع: ${meeting}<br>
-    رقم الهاتف: ${phone}<br>
-    الرقم القومي: ${id}<br>
-    المنطقة: ${area}<br>
-    رقم الحجز: ${serial}<br>
-    التاريخ: ${now.toLocaleString()}
-  `;
-  document.getElementById("confirmationDetails").innerHTML = confirmation;
-  document.getElementById("confirmation").style.display = "block";
 });
 
-// حفظ كصورة
 function saveAsImage() {
   html2canvas(document.getElementById("confirmation"), {
     backgroundColor: "#FFFFFF",

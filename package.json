@@ -3,5 +3,24 @@
     "firebase-admin": "^13.3.0",
     "moment": "^2.30.1",
     "uuid": "^11.1.0"
-  }
+  },
+  "name": "booking_app",
+  "version": "1.0.0",
+  "main": "admin.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markBH1510/bookingApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/markBH1510/bookingApp/issues"
+  },
+  "homepage": "https://github.com/markBH1510/bookingApp#readme",
+  "description": ""
 }
