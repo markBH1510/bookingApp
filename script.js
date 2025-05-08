@@ -10,9 +10,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const bookingStart = new Date("2025-05-08T16:00:00");
-const bookingEnd =   new Date("2025-05-08T22:00:00");
-
+const bookingStart = new Date("2025-05-09T09:00:00");
+const bookingEnd =   new Date("2025-05-09T12:00:00");
 const bookingStatus = document.getElementById("bookingStatus");
 const submitButton = document.getElementById("submitBtn");
 const statusIcon = document.getElementById("statusIcon");
@@ -31,7 +30,7 @@ function formatCountdown(diff) {
   return `${d}ي ${h}س ${m}د ${s}ث`;
 }
 
-async function updateBookingStatus() {
+/*async function updateBookingStatus() {
   const now = await getServerTime();
 
   if (now < bookingStart) {
@@ -39,7 +38,7 @@ async function updateBookingStatus() {
     bookingStatus.innerText = `لم يبدأ الحجز بعد. يبدأ خلال ${formatCountdown(diff)}`;
     statusIcon.innerText = "⏳";
   } else if (now > bookingEnd) {
-    bookingStatus.innerText = "⛔ انتهى وقت الحجز.";
+    bookingStatus.innerText = "انتهى وقت الحجز.";
     statusIcon.innerText = "⛔";
   } else {
     const diff = bookingEnd - now;
@@ -47,9 +46,8 @@ async function updateBookingStatus() {
     statusIcon.innerText = "⏰";
   }
 }
-
-setInterval(updateBookingStatus, 10000);
-updateBookingStatus();
+setInterval(updateBookingStatus, 600000);
+updateBookingStatus();*/
 
 async function checkDuplicate(phone, id, area) {
   const phoneSnapshot = await db.collection("bookings")
@@ -137,13 +135,13 @@ document.getElementById("submitBtn").addEventListener("click", async function (e
 
   try {
     document.getElementById("btnText").innerText = "جارٍ الحجز...";
-document.getElementById("loader").style.display = "inline-block";
+    document.getElementById("loader").style.display = "inline-block";
     const now = await getServerTime();
     const devicetime = new Date();
     // حساب الفرق بين التوقيتين
     const timeDifference = Math.abs(now.getTime() - devicetime.getTime());
-    // إذا كان الفرق أقل من 1000 ميلي ثانية (أي أقل من ثانية واحدة)، اعتبر الوقت متساويًا
-    if (timeDifference > 5000)return alert("تأكد من ضبط الوقت على جهازك بشكل صحيح.");
+    // إذا كان الفرق أقل من 300,000 ميلي ثانية (اقل من 5 دقايق)، اعتبر الوقت متساويًا
+    if (timeDifference > 300000)return alert("تأكد من ضبط الوقت على جهازك بشكل صحيح.");
     if (now < bookingStart) return alert("لم يبدأ الحجز بعد.");
     if (now > bookingEnd) return alert("انتهى وقت الحجز.");
    
