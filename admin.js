@@ -1,11 +1,11 @@
 // إعداد Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBaObSQWm_eQTW7dY9a_X3-0CMs7wh234g",
-  authDomain: "booking-a83c7.firebaseapp.com",
-  projectId: "booking-a83c7",
-  storageBucket: "booking-a83c7.firebasestorage.app",
-  messagingSenderId: "152509227195",
-  appId: "1:152509227195:web:bef9bd33bd5e93002ac99e"
+  apiKey: "AIzaSyDja9eivzDSikSeL4L_KGlSAjF3YWPtlL4",
+  authDomain: "booking2-e9d03.firebaseapp.com",
+  projectId: "booking2-e9d03",
+  storageBucket: "booking2-e9d03.firebasestorage.app",
+  messagingSenderId: "720607889633",
+  appId: "1:720607889633:web:d331b28de6a4efa7a04fa0"
 };
 
 firebase.initializeApp(firebaseConfig);
