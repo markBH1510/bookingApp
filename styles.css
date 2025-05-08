@@ -148,6 +148,7 @@ button:hover {
   text-align: right;
 }
 
+
 /* تحسينات للموبايل */
 @media (max-width: 480px) {
   #confirmation {
@@ -172,6 +173,30 @@ button:hover {
     text-align: right;
     width: 100%;
   }
+}
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+  .loader {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* الوضع الداكن */
@@ -228,4 +253,5 @@ button:hover {
   .detail-label {
     color: #9db3ff;
   }
+  
 }

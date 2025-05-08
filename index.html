@@ -23,8 +23,8 @@
          <strong style="font-size:16.5px; font-family:'Dubai Medium', Times, serif;color:red"> * هذا حجز لرقم مسلسل فقط، برجاء التواجد في منطقة الحجز التابع لها ( يوم الجمعة 2025/5/9 الساعة 11 صباحاً ) للحجز وتسليم المستندات</strong><br />
           * مسموح لرقم الموبايل يحجز مرة واحدة فقط<br />
           * مسموح لجهاز الموبايل يحجز أكثر من مرة لمساعدة الآخرين لكن ببياناتهم هم.<br />
-          * يجب كتابة الأرقام باللغة الأنجليزية فقط  <br />
-          * يجب كتابة الرقم القومي 14 رقم<br />
+          * يجب كتابة رقم التليفون والرقم القومي باللغة الأنجليزية فقط  <br />
+          * يجب كتابة الرقم القومي 14 رقم (لا يقبل لمن هم اقل من 15 سنة حتى اليوم)<br />
         </div>
       </div>
 
@@ -38,9 +38,11 @@
         <option value="من ملوى الى ديروط">من ملوى الى ديروط</option>
         <option value="من القوصية الى ما قبل طما">من القوصية الى ما قبل طما</option>
       </select>
-      <button id="submitBtn" type="button">حجز</button>
+      <button id="submitBtn" type="button">
+        <span id="btnText">حجز</span>
+        <span id="loader" class="loader" style="display: none;"></span>
+      </button>
     </form>
-
     <div id="confirmation" style="display:none;">
       <h2>✅ تم الحجز بنجاح</h2>
       <div id="confirmationDetails"></div>

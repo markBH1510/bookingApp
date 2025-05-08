@@ -81,35 +81,48 @@ async function getNextSerial(area) {
 }
 
 function validateEgyptianID(id) {
+  //التأكد من أن الرقم القومي يتكون من 14 رقم
   if (!/^\d{14}$/.test(id)) return false;
-
+//التأكد من أن الرقم القومي يبدأ برقم 2 أو 3
   const firstDigit = parseInt(id[0]);
   if (firstDigit !== 2 && firstDigit !== 3) return false;
-
+//التأكد من رقم صحيح للسنة
   const secondAndThirdDigits = parseInt(id.slice(1, 3));
   if (secondAndThirdDigits < 0 || secondAndThirdDigits > 99) return false;
-
+//التأكد من أن الشهر صحيح
   const month = parseInt(id.slice(3, 5));
   if (month < 1 || month > 12) return false;
-
+//
   const day = parseInt(id.slice(5, 7));
   if ([1, 3, 5, 7, 8, 10, 12].includes(month) && (day < 1 || day > 31)) return false;
   if ([4, 6, 9, 11].includes(month) && (day < 1 || day > 30)) return false;
-
+//التأكد من أن اليوم في الشهر صحيح
   if (month === 2) {
     const year = parseInt(id.slice(1, 3));
     const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
     if (isLeapYear && (day < 1 || day > 29)) return false;
     if (!isLeapYear && (day < 1 || day > 28)) return false;
   }
-
+  //التأكد من كود المحافظة
   const eighthAndNinthDigits = parseInt(id.slice(7, 9));
-  if (
-    (eighthAndNinthDigits < 1 || eighthAndNinthDigits > 4) &&
-    (eighthAndNinthDigits < 11 || eighthAndNinthDigits > 35) &&
-    eighthAndNinthDigits !== 88
-  ) return false;
-
+  const validCodes = [
+    1, 2, 3, 4,
+    11, 12, 13, 14, 15, 16, 17, 18, 19,
+    21, 22, 23, 24, 25, 26, 27, 28, 29,
+    31, 32, 33, 34, 35,
+    88
+  ];
+  if (!validCodes.includes(eighthAndNinthDigits)) return false;
+  //التأكد من ان تاريخ الميلاد ليس في المستقبل
+  // التأكد من أن الرقم القومي لا يقل عن 16 سنة
+     const birthYear = parseInt(id.slice(1, 3), 10) + (id[0] === '2' ? 1900 : 2000);
+     const birthMonth = parseInt(id.slice(3, 5), 10) - 1;
+     const birthDay = parseInt(id.slice(5, 7), 10);
+     const birthDate = new Date(birthYear, birthMonth, birthDay);
+     const today = new Date();
+     const age = today.getFullYear() - birthDate.getFullYear() - (today < new Date(today.getFullYear(), birthMonth, birthDay) ? 1 : 0);
+     if (birthDate > today || age < 15) return false;
+  
   return true;
 }
 
@@ -123,6 +136,8 @@ document.getElementById("submitBtn").addEventListener("click", async function (e
   submitButton.disabled = true;
 
   try {
+    document.getElementById("btnText").innerText = "جارٍ الحجز...";
+document.getElementById("loader").style.display = "inline-block";
     const now = await getServerTime();
     const devicetime = new Date();
     // حساب الفرق بين التوقيتين
@@ -181,6 +196,8 @@ document.getElementById("confirmation").style.display = "block";
     console.error(err);
   } finally {
     submitButton.disabled = false;
+    document.getElementById("btnText").innerText = "حجز";
+    document.getElementById("loader").style.display = "none";
   }
 });
 
